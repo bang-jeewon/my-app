@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            // concat, filter, map, slice, spread
+
+            // spread
+            const a = [1, 2, 3];
+            const b = [...a];
+            console.log('1. ============== 스프레드 연산자');
+            b.push(4);
+            console.log(`a의 값은: ${a}`); //a의 값은: 1,2,3
+            console.log(`b의 값은: ${b}`); //b의 값은: 1,2,3,4
+
+            //concat
+            // add할 때. 추가할 때 사용한다.
+            console.log('2. ============== concat 연산자');
+            const a2 = [1, 2, 3];
+            const b2 = a2.concat(4); //a2에 4가 추가된 버전이 b2에 들어감 (1,2,3,4) => 깊은 복사
+            // const b2 = a2.push(4);  //b2에 4만 들어가있음
+            // a2.push(4); // 일단 b2는 없고, a2에 4가 추가된 버전이 됨 (1,2,3,4)
+            a2.concat(4); // a2에 4가 들어가지 않아써... (1,2,3) => 추가할 때 이렇게 하시면 돼요??? 뭘???
+            console.log(`a2의 값은: ${a2}`); //a의 값은: 1,2,3
+            console.log(`b2의 값은: ${b2}`); //b의 값은: 1,2,3,4
+            const c2 = [0, ...a2, 4]; // => 배열의 앞뒤에 값을 넣을 수 있다
+            console.log(`c의 값은: ${c2}`); //c의 값은: 0,1,2,3,4
+
+            //filter
+            // boolean을 return받음 => true만 걸러낸다.
+            // 보통 삭제하기 에서 사용한다.
+            console.log('2. ============== filter 연산자');
+            const a3 = [1, 2, 3];
+            const b3 = a3.filter((n) => {
+                return n != 1;
+            });
+            console.log(b3);
+            // 삭제하기 할 때 쓸 수 있음. 어떤 DOM을 삭제하려고 클릭하면 그 DOM이 id가 1번이면, db에 삭제 요청을 하고, okay가 떨어지면 filter해서
+
+            //slice
+            // 잘라내기
+            const a4 = [1, 2, 3];
+            const b4 = a4.slice(0, 2); //[1, 2]
+            console.log(`a2의 값은: ${a4}`); //a2의 값은: 1,2,3
+            console.log(`b2의 값은: ${b4}`); //b2의 값은: 1,2
+
+            const c4 = [0, ...a4.slice(0, 2), 9, ...a4.slice(2, 3)];
+            console.log(`c4의 값은: ${c4}`); //c4의 값은: 0,1,2,9,3
+
+            const d4 = a4.slice(0, 2).concat(9);
+            console.log(`d4의 값은: ${d4}`); //d4의 값은: 1,2,9
+
+            //map  => 값 하나하나를 가공할 수 있음. 회전 초밥
+            //filter는 순회하면서 return이 true이면 //map은 true false가 아니라 순회하면서 다 뿌려줘
+            const a5 = [1, 2, 3];
+            // for (let i = 0; i < a5.length; i++) {   // => jsx에서는 이 문법 사용 불가능!!
+            //     console.log(a5[i]);
+            // }
+            a5.forEach((n) => {
+                // return 못함!! 그냥 뿌리기만 하는게 아니라 값을 복사해서 다른데서도 사용해야 하면, 요 문법은 지양
+                // 추가로 얘를 b5라든지 어떤 새로운 변수에 담을 수 없음 !!! const b5 = a5.forEach~~~ <- 이게 안 된다는 말!
+                console.log(n);
+            });
+            const b5 = a5.map((n) => n); // = const b5 = [...a5]
+            // const b5 = a5.map((n) => {return n;})
+            console.log(`b5의 값은: ${b5}`); //b5의 값은: 1,2,3
+
+            //수정 ???
+            const users = [
+                { id: 1, name: '구태모', phone: '1111' },
+                { id: 2, name: '구태모2', phone: '2222' },
+                { id: 3, name: '구태모3', phone: '3333' },
+            ];
+
+            const updateUserDto = {
+                id: 2,
+                name: '홍길동',
+            };
+
+            //spread활용한 수정 => 죠타
+            const a6 = { id: 1, name: '구태모' };
+            console.log(a6);
+            const b6 = { ...a6, name: '홍길동' };
+            console.log(b6);
+
+            //map활용한 수정 = 방지원방식인데, 이건 아마 jsx에서는 못 쓸듯?
+            users.map((user) => {
+                if (user.id === updateUserDto.id) {
+                    return (user.name = '홍길동');
+                }
+            });
+            console.log(users); //악 바꼈다!!
+
+            //map + 삼항연산자 이용 => 죠타가 아니라, name만 가져오니까 배열 전체를 가져오려면 요건 안될듯
+            const newUsers1 = users.map((user) =>
+                user.id === updateUserDto.id
+                    ? (user.name = '홍길동')
+                    : (user.name = user.name),
+            );
+            console.log('newUsers1', newUsers1);
+
+            //map + 삼항연산자 이용 => 죠타
+            const newUsers2 = users.map((user) =>
+                user.id === updateUserDto.id
+                    ? { ...user, ...updateUserDto }
+                    : user,
+            );
+            console.log('newUsers2', newUsers2);
+        </script>
+    </body>
+</html>
