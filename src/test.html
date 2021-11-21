@@ -105,6 +105,7 @@
             console.log('newUsers1', newUsers1);
 
             //map + 삼항연산자 이용 => 죠타
+            //여기서 filter를 써버리면 true인것만 반환되므로 배열 전체를 받을 수 없음
             const newUsers2 = users.map((user) =>
                 user.id === updateUserDto.id
                     ? { ...user, ...updateUserDto }
